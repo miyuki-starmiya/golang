@@ -5,7 +5,9 @@ import (
 )
 
 func main() {
-	var i int = 3
-	var j float32 = float32(i)
-	fmt.Println(j)
+	i := 0
+	for i<3 {
+		fmt.Println("hello")
+		i ++
+	}
 }

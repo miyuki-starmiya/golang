@@ -57,6 +57,70 @@ func foo() {
 }
 ```
 
+## Control Flow
+
+### For Loop
+
+初期値と条件式を囲む()がいらない
+
+```go
+func main() {
+  for i := 0; i<3; i++ {
+    fmt.Println(i)
+  }
+}
+```
+
+`while`は存在せず、以下のように書ける
+
+```go
+func main() {
+  cnt := 0 // カウンタ変数
+  for cnt<3 {
+    fmt.Println(cnt)
+    cnt++
+  }
+}
+```
+
+`loop`は存在せず、以下のように書ける
+
+```go
+func main() {
+  for {
+    // loop infinity
+  }
+}
+```
+
+### If Conditional
+
+```go
+func main() {
+  if height < 170 {
+    fmt.Println("not good")
+  } else if height < 180 {
+    fmt.Println("great")
+  } else {
+    fmt.Println("excellent!")
+  }
+}
+```
+
+変数宣言付きショートハンド
+
+```go
+func main() {
+  if height := 182; height > 180 {
+    fmt.Println("excellent!")
+  }
+}
+```
+
+#### Switch
+
+
+
 ## Functions
 
 ```go

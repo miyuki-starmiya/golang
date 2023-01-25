@@ -20,12 +20,16 @@ func main() {
 
 ## Types
 
-- bool
-- string
-- int
-- byte(uint8)
-- float32, float64
-- complex64, complex128
+- primitive
+  - bool
+  - string
+  - int
+  - byte(uint8)
+  - float32, float64
+  - complex64, complex128
+- advanced
+  - pointer
+  - struct
 
 ### Type Cast
 
@@ -35,6 +39,45 @@ func main() {
 i := 3
 var j float32 = float32(i)
 ```
+
+### Pointers
+
+データの実体ではなく、メモリアドレスを返す
+
+- &: 実体 => ポインタ
+- *: ポインタ => 実体
+
+```go
+func main() {
+  i := 1
+  var p *int = &i
+  fmt.Println(p) // 0xc000014260
+  var data = *p
+  fmt.Println(data) // 1
+}
+```
+
+### Structs
+
+struct.fieldでアクセスする。pointer.fieldでもアクセス可
+
+```go
+type Human struct {
+	Age  int
+	Name string
+}
+
+func main() {
+	h := Human{14, "hitoe"}
+  p := &h
+	fmt.Println(Human{14, "hitoe"})
+	fmt.Println(h.Age)
+  fmt.Println(p.Age) // (*h).Age
+
+  no_name := Human{Age: 6} // no_name.Name = ""
+}
+```
+
 
 ## Variables
 
@@ -56,6 +99,12 @@ func foo() {
   x := "str" // 型宣言なしで代入。関数内でしか使えない
 }
 ```
+
+### Print Debug
+
+- Print: フォーマットなし。改行なし
+- Println: Print line. フォーマットなし。改行あり
+- Printf: Print format. フォーマットあり。改行なし
 
 ## Control Flow
 
@@ -105,6 +154,19 @@ func main() {
     fmt.Println("excellent!")
   }
 }
+
+// equivalent
+
+func main() {
+  switch {
+  case height < 170:
+    fmt.Println("not good")
+  case height < 180:
+    fmt.Println("great")
+  default:
+    fmt.Println("excellent!")
+  }
+}
 ```
 
 変数宣言付きショートハンド
@@ -119,7 +181,44 @@ func main() {
 
 #### Switch
 
+すべてのcase文にbreakが暗黙的に実行されている
 
+```go
+func main() {
+	fmt.Println("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin": // 暗黙的にbreakが実行
+		fmt.Println("OS X")
+	case "linux":
+		fmt.Println("Linux")
+	default:
+		fmt.Printf("it's default")
+	}
+}
+```
+
+#### Defer
+
+関数がreturnされた後に実行する
+
+```go
+func main() {
+  defer fmt.Println("world")
+
+  fmt.Println("hello ")
+}
+```
+
+deferした関数はLIFO(Last-in-First-out)になる
+
+```go
+func main() {
+  for i := 0; i<3; i++ {
+    defer fmt.Println(i)
+  }
+}
+// 2, 1, 0
+```
 
 ## Functions
 

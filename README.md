@@ -18,67 +18,6 @@ func main() {
 }
 ```
 
-## Types
-
-- primitive
-  - bool
-  - string
-  - int
-  - byte(uint8)
-  - float32, float64
-  - complex64, complex128
-- advanced
-  - pointer
-  - struct
-
-### Type Cast
-
-型を関数のようにすることで、型キャストができる
-
-```go
-i := 3
-var j float32 = float32(i)
-```
-
-### Pointers
-
-データの実体ではなく、メモリアドレスを返す
-
-- &: 実体 => ポインタ
-- *: ポインタ => 実体
-
-```go
-func main() {
-  i := 1
-  var p *int = &i
-  fmt.Println(p) // 0xc000014260
-  var data = *p
-  fmt.Println(data) // 1
-}
-```
-
-### Structs
-
-struct.fieldでアクセスする。pointer.fieldでもアクセス可
-
-```go
-type Human struct {
-	Age  int
-	Name string
-}
-
-func main() {
-	h := Human{14, "hitoe"}
-  p := &h
-	fmt.Println(Human{14, "hitoe"})
-	fmt.Println(h.Age)
-  fmt.Println(p.Age) // (*h).Age
-
-  no_name := Human{Age: 6} // no_name.Name = ""
-}
-```
-
-
 ## Variables
 
 大文字ではじまる変数は外部から参照可能。小文字の変数はそのパッケージからしか参照できない。
@@ -105,6 +44,105 @@ func foo() {
 - Print: フォーマットなし。改行なし
 - Println: Print line. フォーマットなし。改行あり
 - Printf: Print format. フォーマットあり。改行なし
+
+## Types
+
+- primitive
+  - bool
+  - string
+  - int
+  - byte(uint8)
+  - float32, float64
+  - complex64, complex128
+- advanced
+  - pointer
+  - struct
+
+### Type Cast
+
+型を関数のようにすることで、型キャストができる
+
+```go
+i := 3
+var j float32 = float32(i)
+```
+
+### Array
+
+- Array: [n]T 固定長
+- Slice: []T 可変長。Arrayの参照なので、参照を変更すると実体も変更される(参照渡し)。ArrayよりSliceの方がよく使われる
+
+- methods
+  - len(): 要素数
+  - cap(): capacity. アドレス数
+  - make(type, len): 要素数分のゼロ値を格納したスライスを作成
+  - append(slice, ...factors): Sliceに要素を追加
+
+```go
+func main() {
+  var a [2] int
+  a[0] = 1
+  a[1] = 2
+  // a = [1 2]
+
+  b := [3]{1, 2, 3}
+  // b = [1 2 3]
+
+  var c []int = b[1:3]
+  // c = [1 2]
+
+  c[0] = 3
+  // c = [3 2]
+  // b [3 2 3]
+
+  d := []int{1, 2, 3, 4, 5}
+  // d [1 2 3 4 5]
+
+  e = d[1:] // [2 3 4 5]
+  f = [:] // [2 3 4 5]
+}
+```
+
+### Pointer
+
+データの実体ではなく、メモリアドレスを返す
+
+- &: 実体 => ポインタ
+- *: ポインタ => 実体
+
+```go
+func main() {
+  i := 1
+  var p *int = &i
+  fmt.Println(p) // 0xc000014260
+  var data = *p
+  fmt.Println(data) // 1
+}
+```
+
+### Struct
+
+struct.fieldでアクセスする。pointer.fieldでもアクセス可
+
+```go
+type Human struct {
+	Age  int
+	Name string
+}
+
+func main() {
+	h := Human{14, "hitoe"}
+  p := &h
+	fmt.Println(Human{14, "hitoe"})
+	fmt.Println(h.Age)
+  fmt.Println(p.Age) // (*h).Age
+
+  no_name := Human{Age: 6} // no_name.Name = ""
+}
+```
+
+
+
 
 ## Control Flow
 
@@ -138,6 +176,23 @@ func main() {
 func main() {
   for {
     // loop infinity
+  }
+}
+```
+
+#### range
+
+`for i in iterable`の構文
+
+```go
+func main() {
+  iterable := []int{1, 2, 3}
+  for i, e := range iterable {
+    fmt.Println(i, e)
+  }
+
+  for _, e := range iterable {
+    fmt.Println(e) // discard _
   }
 }
 ```

@@ -10,7 +10,8 @@ type Human struct {
 }
 
 func main() {
-	h := Human{14, "hitoe"}
-	fmt.Println(Human{14, "hitoe"})
-	fmt.Println(h.Age)
+	iterable := []int{1, 2, 3}
+	for _, e := range iterable {
+		fmt.Println(e)
+	}
 }

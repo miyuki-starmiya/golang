@@ -308,3 +308,9 @@ func split(sum int) (x, y int) {
 - run: コンパイルした後、実行
 - test: テスト実行
 
+## 開発の仕方
+
+1. go mod init <url>
+2. go get modules
+3. write code into main.go
+

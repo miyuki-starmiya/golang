@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// http://go-colly.org/docs/introduction/install/
 	c := colly.NewCollector()
 
 	c.OnHTML("title", func(e *colly.HTMLElement) {

@@ -6,15 +6,32 @@ import (
 	"github.com/gocolly/colly"
 )
 
-func main() {
-	// http://go-colly.org/docs/introduction/install/
-	c := colly.NewCollector()
+// type Title struct {
+// 	ID int
+// 	Title string
+// }
 
-	c.OnHTML("title", func(e *colly.HTMLElement) {
-		fmt.Println(e.Text)
+// type Title string
+
+func main() {
+	allTitles := make([]string, 0)
+
+	collector := colly.NewCollector(
+		colly.AllowedDomains("anitrendz.com", "www.anitrendz.com"),
+	)
+
+	collector.OnHTML("body", func(e *colly.HTMLElement) {
+		title := e.Text
+
+		allTitles = append(allTitles, title)
 	})
 
-	url := "https://example.com/"
-	c.Visit(url)
-}
+	collector.OnRequest(func(req *colly.Request) {
+		fmt.Println("Visiting", req.URL.String())
+	})
 
+	url := "https://anitrendz.com/charts/top-anime"
+	collector.Visit(url)
+
+	fmt.Println(allTitles)
+}

@@ -1,4 +1,21 @@
 
+## Commands
+
+- build: コンパイル
+- fmt: フォーマット
+- get: 外部パッケージの取得
+- mod: モジュールメンテナンス
+  - init: go.modの初期化
+- run: コンパイルした後、実行
+- test: テスト実行
+
+## 開発の仕方
+
+1. ディレクトリの初期化: go mod init <url>
+2. ライブラリの読み込み: go get modules
+3. 実装: write code into main.go
+
+
 ## Packages
 
 モジュールのこと。`main`から最初に読み込まれる。mainがないと動かない
@@ -6,7 +23,7 @@
 - import: 複数の場合は()で囲む
 
 ```go
-package go
+package main
 
 import (
   "fmt"
@@ -21,7 +38,7 @@ func main() {
 ## Variables
 
 大文字ではじまる変数は外部から参照可能。小文字の変数はそのパッケージからしか参照できない。
-静的に型をつけなくても、自動で型推論される。型宣言なしで代入する場合:=を使う。
+静的に型をつけなくても、自動で型推論される。型宣言なしで宣言・初期化(代入)する場合`:=`を使う。
 変数に何も代入しない時はゼロ値が暗黙的に代入される
 
 - ゼロ値
@@ -142,13 +159,13 @@ func main() {
 ```
 
 
-
-
 ## Control Flow
-
 ### For Loop
 
 初期値と条件式を囲む()がいらない
+
+- break: ループを脱出
+- continue: 次のイテレーションへ進む
 
 ```go
 func main() {
@@ -198,6 +215,8 @@ func main() {
 ```
 
 ### If Conditional
+
+三項演算子のショートハンド記法はない
 
 ```go
 func main() {
@@ -298,19 +317,4 @@ func split(sum int) (x, y int) {
 }
 ```
 
-## Commands
-
-- build: コンパイル
-- fmt: フォーマット
-- get: 外部パッケージの取得
-- mod: モジュールメンテナンス
-  - init: go.modの初期化
-- run: コンパイルした後、実行
-- test: テスト実行
-
-## 開発の仕方
-
-1. go mod init <url>
-2. go get modules
-3. write code into main.go
 

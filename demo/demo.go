@@ -1,11 +1,14 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	var input string
-	fmt.Scanf("%s", &input)
-	fmt.Println(input)
+	// map
+	m := make(map[string]int)
+	m["key"] = 0
+	fmt.Println(m)
+
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
 }

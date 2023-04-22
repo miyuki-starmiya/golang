@@ -92,32 +92,52 @@ var j float32 = float32(i)
 - methods
   - len(): 要素数
   - cap(): capacity. アドレス数
-  - make(type, len): 要素数分のゼロ値を格納したスライスを作成
+  - make([]T, len): 要素数分のゼロ値を格納したスライスを作成
   - append(slice, ...factors): Sliceに要素を追加
+
+- range: iterableをiterationさせる時に使う
+
+removeする時は癖があり、i番目の前後の要素を再作成する必要がある
 
 ```go
 func main() {
-  var a [2] int
-  a[0] = 1
-  a[1] = 2
-  // a = [1 2]
+  // initialize
+	var arr = [3]int{1, 2, 3}
+	arr2 := make([]int, 2)
+	arr2[0] = 1
+	arr2[1] = 2
+	fmt.Println(arr, arr2)
 
-  b := [3]{1, 2, 3}
-  // b = [1 2 3]
+  // append
+  add := append(arr, 4)
 
-  var c []int = b[1:3]
-  // c = [1 2]
+  // concat
+  c := append(arr, arr2...)
 
-  c[0] = 3
-  // c = [3 2]
-  // b [3 2 3]
+  // remove
+  i := 1
+  r := append(arr[:i], arr[i+1:]...)
 
-  d := []int{1, 2, 3, 4, 5}
-  // d [1 2 3 4 5]
-
-  e = d[1:] // [2 3 4 5]
-  f = [:] // [2 3 4 5]
+  // range
+  arr := []int{1, 2, 3}
+	for i, e := range arr {
+		fmt.Println(i, e)
+	}
 }
+```
+
+### Map
+
+GoのMapはiterableのコールバックとして使うのではなく、ObjectやHash、Dictの役割
+
+```go
+	m := make(map[string]int)
+	m["key"] = 0
+	fmt.Println(m)
+
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
 ```
 
 ### Pointer
@@ -136,28 +156,6 @@ func main() {
   fmt.Println(data) // 1
 }
 ```
-
-### Struct
-
-struct.fieldでアクセスする。pointer.fieldでもアクセス可
-
-```go
-type Human struct {
-	Age  int
-	Name string
-}
-
-func main() {
-	h := Human{14, "hitoe"}
-  p := &h
-	fmt.Println(Human{14, "hitoe"})
-	fmt.Println(h.Age)
-  fmt.Println(p.Age) // (*h).Age
-
-  no_name := Human{Age: 6} // no_name.Name = ""
-}
-```
-
 
 ## Control Flow
 ### For Loop
@@ -271,6 +269,10 @@ func main() {
 }
 ```
 
+### Error Handling
+
+
+
 #### Defer
 
 関数がreturnされた後に実行する
@@ -316,5 +318,54 @@ func split(sum int) (x, y int) {
   return // x, yを省略している
 }
 ```
+
+## Type
+
+### Pointer
+
+データの実体ではなく、メモリアドレスを返す
+
+- &: アドレスを返す
+- *: ポインタ => 実体
+
+```go
+func main() {
+  i := 1
+  var p *int = &i
+  fmt.Println(p) // 0xc000014260
+  var data = *p
+  fmt.Println(data) // 1
+}
+```
+
+### Struct
+
+struct.fieldでアクセスする。pointer.fieldでもアクセス可
+
+```go
+type Human struct {
+	Age  int
+	Name string
+}
+
+func main() {
+	h := Human{14, "hitoe"}
+  p := &h
+	fmt.Println(Human{14, "hitoe"})
+	fmt.Println(h.Age)
+  fmt.Println(p.Age) // (*h).Age
+
+  no_name := Human{Age: 6} // no_name.Name = ""
+}
+```
+
+### Method
+### Interface
+
+### Generics
+
+## Concurrency
+### Goroutine
+### Channel
 
 

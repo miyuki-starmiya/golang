@@ -19,6 +19,7 @@
 ## Packages
 
 モジュールのこと。`main`から最初に読み込まれる。mainがないと動かない
+Goは`大文字`の変数しか外部から参照できない
 
 - import: 複数の場合は()で囲む
 
@@ -40,6 +41,23 @@ func main() {
 大文字ではじまる変数は外部から参照可能。小文字の変数はそのパッケージからしか参照できない。
 静的に型をつけなくても、自動で型推論される。型宣言なしで宣言・初期化(代入)する場合`:=`を使う。
 変数に何も代入しない時はゼロ値が暗黙的に代入される
+
+### Type
+
+- Basic
+  - int
+  - float32
+  - complex64
+  - bool
+- String
+- Array: [capacity]T
+- Slice: variable Array []T
+- Struct
+- Pointer: address of value
+- Interface: 抽象基底メソッド
+- Map: key-value
+- Function: 
+- error: StandardErrorクラス
 
 - ゼロ値
   - int: 0
@@ -271,30 +289,9 @@ func main() {
 
 ### Error Handling
 
+Goにはtry, catchのような構文が存在しない。代わりにerrorクラスを条件分岐させて出力させる
 
 
-#### Defer
-
-関数がreturnされた後に実行する
-
-```go
-func main() {
-  defer fmt.Println("world")
-
-  fmt.Println("hello ")
-}
-```
-
-deferした関数はLIFO(Last-in-First-out)になる
-
-```go
-func main() {
-  for i := 0; i<3; i++ {
-    defer fmt.Println(i)
-  }
-}
-// 2, 1, 0
-```
 
 ## Functions
 
@@ -318,20 +315,45 @@ func split(sum int) (x, y int) {
   return // x, yを省略している
 }
 ```
+### Defer
+
+関数がreturnされた後に実行する
+
+```go
+func main() {
+  defer fmt.Println("world")
+
+  fmt.Println("hello ")
+}
+```
+
+deferした関数はLIFO(Last-in-First-out)になる
+
+```go
+func main() {
+  for i := 0; i<3; i++ {
+    defer fmt.Println(i)
+  }
+}
+// 2, 1, 0
+```
 
 ## Type
 
 ### Pointer
 
-データの実体ではなく、メモリアドレスを返す
+データの実体ではなくメモリアドレスを返す。ポインタはアドレスだから軽量
+意味論: 関数の引数に渡してメモリを省力化
 
-- &: アドレスを返す
-- *: ポインタ => 実体
+- &: 実体 to アドレス
+- *: アドレス to 実体。ポインタ型や、ポインタからデリファレンスして実体を得る
+
+- デリファレンス: ポインタから実体を得ること
 
 ```go
 func main() {
   i := 1
-  var p *int = &i
+  var p *int = &i // iのアドレス
   fmt.Println(p) // 0xc000014260
   var data = *p
   fmt.Println(data) // 1
@@ -344,12 +366,15 @@ struct.fieldでアクセスする。pointer.fieldでもアクセス可
 
 ```go
 type Human struct {
-	Age  int
-	Name string
+	age  int
+	name string
 }
 
 func main() {
-	h := Human{14, "hitoe"}
+	h := Human{
+    age: 14,
+    name: "hitoe"
+  }
   p := &h
 	fmt.Println(Human{14, "hitoe"})
 	fmt.Println(h.Age)
@@ -360,7 +385,112 @@ func main() {
 ```
 
 ### Method
+
+Structに関数をアタッチする
+
+- レシーバ: アタッチされるStruct
+  - 値レシーバ: レシーバは変更されない
+  - ポインタレシーバ: メソッド内の変更がレシーバに反映されるため、セッターに用いられる
+
+```go
+// ポインタレシーバ
+func (p *Person) greet(newName string) {
+	p.name = newName
+}
+
+func main() {
+	p := Person{
+		age:  16,
+		name: "hitoe",
+	}
+
+	fmt.Println(p)
+	fmt.Println(p.name)
+	p.greet("hoo")
+	fmt.Println(p.name)
+```
+
 ### Interface
+
+`抽象基底メソッド`
+Goには継承がない代わりにInterfaceでStructの抽象化を行う。
+異なるStructに共通の`振る舞い`を持たせることができる。一方で、継承より柔軟で疎結合となる
+
+```go
+type Animal interface {
+	speak() string
+	run()
+}
+
+type Person struct {
+	age  int
+	name string
+}
+
+func (p Person) speak() string {
+	return "hello"
+}
+func (p Person) run() {
+	fmt.Println("human run")
+}
+
+type Dog struct {
+	name string
+}
+
+func (d Dog) speak() string {
+	return "hello"
+}
+func (d Dog) run() {
+	fmt.Println("dog run")
+}
+
+func main() {
+	var a Animal
+
+	p := Person{
+		age:  16,
+		name: "hitoe",
+	}
+	d := Dog{name: "pochi"}
+	a = p
+	a.run()
+	a = d
+	d.run()
+}
+```
+
+### Struct Embeddings
+
+実質Structの継承
+
+```go
+type Human struct {
+  age int
+  name string
+}
+
+func (h Human) greet() {
+  fmt.Printf("hey, I'm %s", h.name)
+}
+
+type Worker struct {
+  Human // 継承的な
+  occupation string
+}
+
+func main() {
+  w := Worker{
+    Human: Human{
+      age: 24,
+      name: "hitoe",
+    },
+    occupation: "engineer",
+  }
+
+  w.greet() // "hey, I'm hitoe"
+}
+```
 
 ### Generics
 

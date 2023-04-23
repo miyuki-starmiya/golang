@@ -496,6 +496,119 @@ func main() {
 
 ## Concurrency
 ### Goroutine
+
+軽量スレッドのような並行処理を実現する。非同期処理が実行できる
+goってつけるだけで、非同期に並列処理してくれる
+
+```go
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// sub-routine
+	go foo()
+	go bar()
+
+	// main-routine
+	time.Sleep(5 * time.Second)
+	fmt.Println("finished")
+}
+
+func foo() {
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%d", i)
+		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+func bar() {
+	for i := 10; i > 0; i-- {
+		fmt.Printf("%d", i)
+		time.Sleep(200 * time.Millisecond)
+	}
+}
+```
+
+
 ### Channel
 
+goroutine間でデータを同期するためのストア
 
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// チャネルの作成
+	messageChannel := make(chan string)
+
+	// ゴルーチンでメッセージを送信
+	go func() {
+		time.Sleep(1 * time.Second)
+		messageChannel <- "Hello, Channel!"
+	}()
+
+	// チャネルからメッセージを受信
+	message := <-messageChannel
+	fmt.Println("Received message:", message)
+}
+```
+
+#### Channel Buffer
+
+channelの変数の数を可変にできる
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+
+  messages := make(chan string, 2)
+
+  messages <- "buffered"
+  messages <- "channel"
+
+  fmt.Println(<-messages)
+  fmt.Println(<-messages)
+}
+```
+
+#### Channel Sync
+#### Channel Directions
+#### Select
+
+複数のChannelからanyで実行可能なものがあればそれを実行する
+
+```go
+func main() {
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		c1 <- "one"
+	}()
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		c2 <- "two"
+	}()
+
+	for i := 0; i < 2; i++ {
+		select {
+		case msg1 := <-c1:
+			fmt.Println("received:", msg1)
+		case msg2 := <-c2:
+			fmt.Println("received:", msg2)
+		}
+	}
+}
+```

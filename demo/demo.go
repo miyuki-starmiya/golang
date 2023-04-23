@@ -3,7 +3,13 @@ package main
 import "fmt"
 
 func main() {
-	var s []int
-	s = []int{1, 2, 3}
-	fmt.Println(s)
+
+	messages := make(chan string, 2)
+
+	// messages <- "buffered"
+	messages <- "channel1"
+	messages <- "channel2"
+
+	fmt.Println(<-messages)
+	fmt.Println(<-messages)
 }

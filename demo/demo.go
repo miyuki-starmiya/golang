@@ -2,14 +2,16 @@ package main
 
 import "fmt"
 
+type Character int
+
 func main() {
+	const (
+		C Character = iota
+		CPP
+		Python
+	)
 
-	messages := make(chan string, 2)
-
-	// messages <- "buffered"
-	messages <- "channel1"
-	messages <- "channel2"
-
-	fmt.Println(<-messages)
-	fmt.Println(<-messages)
+	fmt.Println(C, CPP, Python)
 }
+
+

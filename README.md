@@ -42,6 +42,10 @@ func main() {
 静的に型をつけなくても、自動で型推論される。型宣言なしで宣言・初期化(代入)する場合`:=`を使う。
 変数に何も代入しない時はゼロ値が暗黙的に代入される
 
+- 命名規則
+  - 変数名は`camelCase`で記述する
+  - モジュール内変数は簡潔で短い命名、外部参照される変数は説明的な命名
+
 ### Type
 
 - Basic
@@ -57,12 +61,17 @@ func main() {
 - Interface: 抽象基底メソッド
 - Map: key-value
 - Function: 
-- error: StandardErrorクラス
+- error: error型のインターフェース
 
 - ゼロ値
   - int: 0
   - bool: false
   - string: ""
+
+- 変数宣言
+  - var: 変数
+    - := 右辺を自動で型推論する。基本はこちらを使う
+  - const: 定数。コンパイル時から不変
 
 ```go
 var c, python bool // false false
@@ -72,6 +81,13 @@ const Str = "string"
 func foo() {
   x := "str" // 型宣言なしで代入。関数内でしか使えない
 }
+// 列挙型
+type Lang int
+const (
+  C Lang = iota + 1 // 0
+  Python // 1
+  Go // 2
+)
 ```
 
 ### Print Debug
@@ -289,8 +305,30 @@ func main() {
 
 ### Error Handling
 
-Goにはtry, catchのような構文が存在しない。代わりにerrorクラスを条件分岐させて出力させる
+Goにはtry, catchのような構文が存在しない。代わりにerrorを条件分岐させて出力させる
+Goのエラーは`errorインターフェースを満たした単なる値`
+`panic()`はプログラム停止リスクがあるので使わない
 
+- ガード節: err != nilの場合の早期エラーハンドリング
+
+```go
+// errorsで使う関数
+func New(text string) error {
+  return &errorString{text}
+}
+// カスタムエラーの構造体
+type errorString struct {
+  s string
+}
+// Errorメソッドを定義して、errorのインターフェースに従う
+func (e *errorString) Error() string {
+  return e.s
+}
+// ガード節
+if err != nil {
+  errors.New("this is error string")
+}
+```
 
 
 ## Functions
@@ -317,13 +355,20 @@ func split(sum int) (x, y int) {
 ```
 ### Defer
 
-関数がreturnされた後に実行する
+関数が終了する前に実行を保証する
+意味論: リソースの解放やクローズ処理を確実に実行する
 
 ```go
 func main() {
-  defer fmt.Println("world")
+	// ファイルを開く
+	file, err := os.Open("sample.txt")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return // 早期リターン
+	}
 
-  fmt.Println("hello ")
+	// 関数が終了する前にファイルを閉じることを保証するため、deferを使用します
+	defer file.Close()
 }
 ```
 
@@ -339,6 +384,12 @@ func main() {
 ```
 
 ## Type
+
+以下のように型定義できる
+
+```go
+type variable T
+```
 
 ### Pointer
 

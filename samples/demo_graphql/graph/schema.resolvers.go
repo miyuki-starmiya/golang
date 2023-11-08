@@ -12,10 +12,10 @@ import (
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	return &model.Todo{
-		ID: "1",
+		ID:   "1",
 		Text: input.Text,
 		User: &model.User{
-			ID: input.UserID,
+			ID:   input.UserID,
 			Name: "user1",
 		},
 	}, nil
@@ -25,22 +25,36 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return []*model.Todo{
 		{
-			ID: "1",
+			ID:   "1",
 			Text: "todo1",
 			Done: false,
 			User: &model.User{
-				ID: "1",
+				ID:   "1",
 				Name: "user1",
 			},
 		},
 		{
-			ID: "2",
+			ID:   "2",
 			Text: "todo2",
 			Done: true,
 			User: &model.User{
-				ID: "2",
+				ID:   "2",
 				Name: "user2",
 			},
+		},
+	}, nil
+}
+
+// Users is the resolver for the users field.
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	return []*model.User{
+		{
+			ID:  "1",
+			Name: "user1",
+		},
+		{
+			ID:  "2",
+			Name: "user2",
 		},
 	}, nil
 }

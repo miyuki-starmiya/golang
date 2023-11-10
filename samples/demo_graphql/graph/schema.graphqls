@@ -2,28 +2,36 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String!
-}
-
 type Query {
-  todos: [Todo!]!
-  users: [User!]!
-}
-
-input NewTodo {
-  text: String!
-  userId: String!
+  getEntryById(id: String!): Entry
+  searchEntryByTitle(title: String!): [Entry]!
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  addEntry(input: NewEntry!): Entry!
+}
+
+type Entry {
+  id: String!
+  title: String!
+  assignee: String!
+  author: [String!]!
+  priorityDate: String!
+  creationDate: String!
+  publicationDate: String!
+  grantDate: String!
+  resultLink: String!
+  representativeFigureLink: String!
+}
+
+input NewEntry {
+  title: String!
+  assignee: String!
+  author: [String!]!
+  priorityDate: String!
+  creationDate: String!
+  publicationDate: String!
+  grantDate: String!
+  resultLink: String!
+  representativeFigureLink: String!
 }

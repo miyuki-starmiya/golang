@@ -2,19 +2,27 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Entry struct {
+	ID                       string   `json:"id"`
+	Title                    string   `json:"title"`
+	Assignee                 string   `json:"assignee"`
+	Author                   []string `json:"author"`
+	PriorityDate             string   `json:"priorityDate"`
+	CreationDate             string   `json:"creationDate"`
+	PublicationDate          string   `json:"publicationDate"`
+	GrantDate                string   `json:"grantDate"`
+	ResultLink               string   `json:"resultLink"`
+	RepresentativeFigureLink string   `json:"representativeFigureLink"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type NewEntry struct {
+	Title                    string   `json:"title"`
+	Assignee                 string   `json:"assignee"`
+	Author                   []string `json:"author"`
+	PriorityDate             string   `json:"priorityDate"`
+	CreationDate             string   `json:"creationDate"`
+	PublicationDate          string   `json:"publicationDate"`
+	GrantDate                string   `json:"grantDate"`
+	ResultLink               string   `json:"resultLink"`
+	RepresentativeFigureLink string   `json:"representativeFigureLink"`
 }

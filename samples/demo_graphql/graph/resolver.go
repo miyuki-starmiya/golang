@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"demo_graphql/graph/converter"
 	"demo_graphql/graph/services"
 )
 
@@ -14,6 +15,8 @@ type Resolver struct{
 
 func NewResolver() *Resolver {
     return &Resolver{
-        EntryService: services.NewEntryService(),
+        EntryService: services.NewEntryService(
+            converter.NewEntryConverter(),
+        ),
     }
 }

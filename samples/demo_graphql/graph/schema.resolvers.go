@@ -10,43 +10,26 @@ import (
 	"fmt"
 )
 
-type DemoQueryResolver struct{
-    entries []model.Entry
-}
-
-func NewQueryResolver() *DemoQueryResolver {
-    // TODO: DBからデータを取得する
-    return &DemoQueryResolver{
-        entries: []model.Entry{
-			{
-				ID: "JP-5948372-B2",
-				Title: "音声アシスタントでの以前のユーザインタラクションに基づく意図導出",
-				Assignee: "アップル インコーポレイテッド, アップル  インコーポレイテッド",
-				Author: []string{"アダム ジョン チャイヤー，, アダム  ジョン チャイヤー，, ディディエ ルネ グッツオーニ，, ディディエ  ルネ グッツオーニ，, トーマス ロバート グルーバー，, トーマス  ロバート グルーバー，, クリストファー ディーン ブリガム，, クリストファー  ディーン ブリガム，"},
-				PriorityDate: "2010-01-18",
-				CreationDate: "2014-06-20",
-				PublicationDate: "2016-07-06",
-				GrantDate: "2016-07-06",
-				ResultLink: "https://patents.google.com/patent/JP5948372B2/ja",
-				RepresentativeFigureLink: "",
-			},
-        },
-    }
-}
-
 // AddEntry is the resolver for the addEntry field.
 func (r *mutationResolver) AddEntry(ctx context.Context, input model.NewEntry) (*model.Entry, error) {
 	panic(fmt.Errorf("not implemented: AddEntry - addEntry"))
 }
 
 // GetEntryByID is the resolver for the getEntryById field.
-func (r *DemoQueryResolver) GetEntryByID(ctx context.Context, id string) (*model.Entry, error) {
-	for _, entry := range r.entries {
-        if entry.ID == id {
-            return &entry, nil
-        }
-    }
-    return nil, nil
+func (r *queryResolver) GetEntryByID(ctx context.Context, id string) (*model.Entry, error) {
+	return r.EntryService.GetEntryByID(id)
+	// return &model.Entry{
+	// 	ID: "JP-5948372-B2",
+	// 	Title: "音声アシスタントでの以前のユーザインタラクションに基づく意図導出",
+	// 	Assignee: "アップル インコーポレイテッド, アップル  インコーポレイテッド",
+	// 	Author: []string{"アダム ジョン チャイヤー，, アダム  ジョン チャイヤー，, ディディエ ルネ グッツオーニ，, ディディエ  ルネ グッツオーニ，, トーマス ロバート グルーバー，, トーマス  ロバート グルーバー，, クリストファー ディーン ブリガム，, クリストファー  ディーン ブリガム，"},
+	// 	PriorityDate: "2010-01-18",
+	// 	CreationDate: "2014-06-20",
+	// 	PublicationDate: "2016-07-06",
+	// 	GrantDate: "2016-07-06",
+	// 	ResultLink: "https://patents.google.com/patent/JP5948372B2/ja",
+	// 	RepresentativeFigureLink: "",
+	// }, nil
 }
 
 // SearchEntryByTitle is the resolver for the searchEntryByTitle field.
@@ -62,54 +45,3 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	return &model.Todo{
-		ID:   "1",
-		Text: input.Text,
-		User: &model.User{
-			ID:   input.UserID,
-			Name: "user1",
-		},
-	}, nil
-}
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return []*model.Todo{
-		{
-			ID:   "1",
-			Text: "todo1",
-			Done: false,
-			User: &model.User{
-				ID:   "1",
-				Name: "user1",
-			},
-		},
-		{
-			ID:   "2",
-			Text: "todo2",
-			Done: true,
-			User: &model.User{
-				ID:   "2",
-				Name: "user2",
-			},
-		},
-	}, nil
-}
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return []*model.User{
-		{
-			ID:   "1",
-			Name: "user1",
-		},
-		{
-			ID:   "2",
-			Name: "user2",
-		},
-	}, nil
-}

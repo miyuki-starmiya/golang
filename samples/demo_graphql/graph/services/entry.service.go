@@ -3,8 +3,9 @@ package services
 import (
 	"demo_graphql/graph/converter"
 	"demo_graphql/graph/model"
+	"errors"
+	"fmt"
 	"io/ioutil"
-	"log"
 )
 
 type (
@@ -27,12 +28,20 @@ func NewEntryService(
 }
 
 func (s *entryServiceImpl) GetEntryByID(id string) (*model.Entry, error) {
+	// TODO: separate to repository
 	fileContent, err := ioutil.ReadFile("data/entry.txt")
 	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
+		panic(fmt.Errorf("Error reading file: %v", err))
 	}
+
 	entries := s.converter.ConvertToEntries(string(fileContent))
-	return entries[1], nil
+
+	for _, entry := range entries {
+		if entry.ID == id {
+			return entry, nil
+		}
+	}
+	return &model.Entry{}, errors.New("entry not found")
 }
 
 func (s *entryServiceImpl) SearchEntryByTitle(title string) ([]*model.Entry, error) {

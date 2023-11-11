@@ -1,11 +1,12 @@
 package services
 
 import (
-	"demo_graphql/graph/converter"
-	"demo_graphql/graph/model"
 	"errors"
 	"fmt"
 	"io/ioutil"
+
+	"demo_graphql/graph/converter"
+	"demo_graphql/graph/model"
 )
 
 type (

@@ -3,26 +3,27 @@
 package model
 
 type Entry struct {
-	ID                       string   `json:"id"`
-	Title                    string   `json:"title"`
-	Assignee                 string   `json:"assignee"`
-	Author                   []string `json:"author"`
-	PriorityDate             string   `json:"priorityDate"`
-	CreationDate             string   `json:"creationDate"`
-	PublicationDate          string   `json:"publicationDate"`
-	GrantDate                string   `json:"grantDate"`
-	ResultLink               string   `json:"resultLink"`
-	RepresentativeFigureLink string   `json:"representativeFigureLink"`
+	ID                       string `json:"id"`
+	Title                    string `json:"title"`
+	Assignee                 string `json:"assignee"`
+	Author                   string `json:"author"`
+	PriorityDate             string `json:"priorityDate"`
+	CreationDate             string `json:"creationDate"`
+	PublicationDate          string `json:"publicationDate"`
+	GrantDate                string `json:"grantDate"`
+	ResultLink               string `json:"resultLink"`
+	RepresentativeFigureLink string `json:"representativeFigureLink"`
 }
 
 type NewEntry struct {
-	Title                    string   `json:"title"`
-	Assignee                 string   `json:"assignee"`
-	Author                   []string `json:"author"`
-	PriorityDate             string   `json:"priorityDate"`
-	CreationDate             string   `json:"creationDate"`
-	PublicationDate          string   `json:"publicationDate"`
-	GrantDate                string   `json:"grantDate"`
-	ResultLink               string   `json:"resultLink"`
-	RepresentativeFigureLink string   `json:"representativeFigureLink"`
+	ID                       string `json:"id"`
+	Title                    string `json:"title"`
+	Assignee                 string `json:"assignee"`
+	Author                   string `json:"author"`
+	PriorityDate             string `json:"priorityDate"`
+	CreationDate             string `json:"creationDate"`
+	PublicationDate          string `json:"publicationDate"`
+	GrantDate                string `json:"grantDate"`
+	ResultLink               string `json:"resultLink"`
+	RepresentativeFigureLink string `json:"representativeFigureLink"`
 }

@@ -17,7 +17,7 @@ var mockData []*model.Entry = []*model.Entry{
 		ID: "JP-5948372-B2",
 		Title: "音声アシスタントでの以前のユーザインタラクションに基づく意図導出",
 		Assignee: "アップル インコーポレイテッド, アップル  インコーポレイテッド",
-		Author: []string{"アダム ジョン チャイヤー", "アンドリュー ジョン ハーキンズ"},
+		Author: "アダム ジョン チャイヤー, アンドリュー ジョン ハーキンズ",
 		PriorityDate: "2010-01-18",
 		CreationDate: "2014-06-20",
 		PublicationDate: "2016-07-06",
@@ -25,7 +25,6 @@ var mockData []*model.Entry = []*model.Entry{
 		ResultLink: "https://patents.google.com/patent/JP5948372B2/ja",
 		RepresentativeFigureLink: "",
 	},
-	// {ID: "2", /* other fields */},
 }
 
 func (mc *mockConverter) ConvertToEntries(fileContent string) []*model.Entry {

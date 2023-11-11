@@ -15,7 +15,7 @@ type Entry {
   id: String!
   title: String!
   assignee: String!
-  author: [String!]!
+  author: String!
   priorityDate: String!
   creationDate: String!
   publicationDate: String!
@@ -25,9 +25,10 @@ type Entry {
 }
 
 input NewEntry {
+  id: String!
   title: String!
   assignee: String!
-  author: [String!]!
+  author: String!
   priorityDate: String!
   creationDate: String!
   publicationDate: String!

@@ -584,9 +584,9 @@ func (ec *executionContext) _Entry_author(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Entry_author(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3003,13 +3003,22 @@ func (ec *executionContext) unmarshalInputNewEntry(ctx context.Context, obj inte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "assignee", "author", "priorityDate", "creationDate", "publicationDate", "grantDate", "resultLink", "representativeFigureLink"}
+	fieldsInOrder := [...]string{"id", "title", "assignee", "author", "priorityDate", "creationDate", "publicationDate", "grantDate", "resultLink", "representativeFigureLink"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
 		case "title":
 			var err error
 
@@ -3032,7 +3041,7 @@ func (ec *executionContext) unmarshalInputNewEntry(ctx context.Context, obj inte
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("author"))
-			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3740,38 +3749,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]string, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

@@ -3,7 +3,6 @@ package converter
 import (
 	"demo_graphql/graph/model"
 	"encoding/json"
-	"strings"
 )
 
 type (
@@ -31,7 +30,7 @@ func (c *entryConverterImpl) ConvertToEntries(jsonInput string) []*model.Entry {
 			ID:                       e["id"].(string),
 			Title:                    e["title"].(string),
 			Assignee:                 e["assignee"].(string),
-			Author:                   strings.Split(e["inventor/author"].(string), ", "),
+			Author:                   e["inventor/author"].(string),
 			PriorityDate:             e["priority date"].(string),
 			CreationDate:             e["filing/creation date"].(string),
 			PublicationDate:          e["publication date"].(string),

@@ -2,11 +2,10 @@ package services
 
 import (
 	"errors"
-	"fmt"
-	"io/ioutil"
 
 	"demo_graphql/graph/converter"
 	"demo_graphql/graph/model"
+	"demo_graphql/graph/repositories"
 )
 
 type (
@@ -17,25 +16,27 @@ type (
 	}
 	entryServiceImpl struct{
 		converter converter.EntryConverter
+		repository repositories.EntryRepository
 	}
 )
 
 func NewEntryService(
 	c converter.EntryConverter,
+	r repositories.EntryRepository,
 ) EntryService {
 	return &entryServiceImpl{
 		converter: c,
+		repository: r,
 	}
 }
 
 func (s *entryServiceImpl) GetEntryByID(id string) (*model.Entry, error) {
-	// TODO: separate to repository
-	fileContent, err := ioutil.ReadFile("data/entry.txt")
+	fileContent, err := s.repository.Fetch()
 	if err != nil {
-		panic(fmt.Errorf("Error reading file: %v", err))
+		return nil, err
 	}
 
-	entries := s.converter.ConvertToEntries(string(fileContent))
+	entries := s.converter.ConvertToEntries(fileContent)
 
 	for _, entry := range entries {
 		if entry.ID == id {

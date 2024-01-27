@@ -8,13 +8,8 @@ RUN go build -o /app/main .
 
 FROM alpine:3.14
 
-ENV FUNCTION_TARGET=HelloWorld \
-    LOCAL_ONLY=false
-
-# ENV LOCAL_ONLY=true
+ENV FUNCTION_TARGET=HelloWorld
 
 COPY --from=builder /app/main /app/main
-
-EXPOSE 8080
 
 CMD ["/app/main"]
